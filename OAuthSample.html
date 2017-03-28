@@ -35,6 +35,7 @@
     Oidc.Log.logger = console;
 
     manager.events.addUserLoaded(function(data){
+        console.log(data);
         var headers = {};
 
         if (data && data.access_token) {
