@@ -10,6 +10,7 @@
 <body>
     <h1 class="js-user"></h1>
     <button class="js-login">Login</button>
+    <button class="js-login-popup">Login Popup</button>
 
     <script>
     // REPLACE: Your Wayfinder URL.
@@ -26,7 +27,8 @@
         response_type: 'token',
         // Add any secured actions you need here by prepending the secured action id with 'com.serraview.wf.sa.'
         scope: 'email com.serraview.wf.sa.2151',
-        popup_redirect_uri: window.location.href
+        popup_redirect_uri: window.location.href,
+        redirect_uri: window.location.href
     };
 
     var manager = new Oidc.UserManager(settings);
@@ -57,12 +59,21 @@
 
     $('.js-login').on('click', function () {
         manager
+            .signinRedirect()
+            .catch(function (error) {
+                console.error('error while logging in through the redirect', error);
+            });
+    });
+
+    $('.js-login-popup').on('click', function () {
+        manager
             .signinPopup()
             .catch(function (error) {
                 console.error('error while logging in through the popup', error);
             });
     });
 
+    manager.signinRedirectCallback();
     manager.signinPopupCallback();
     </script>
 </body>
