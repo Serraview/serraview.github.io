@@ -51,10 +51,19 @@
             dataType: 'json',
             headers: headers
         }).done(function(response){
-                // Do something with the result of the api call.
-                $('.js-user').text('Hello ' + response.fullName);
-            });
+            // Do something with the result of the api call.
+            $('.js-user').text('Hello ' + response.fullName);
         });
+        
+        $.ajax({
+            url: wayfinderUrl + '/api/reporting/1',
+            method: 'GET',
+            dataType: 'json',
+            headers: headers
+        }).done(function(response){
+            console.log(response);
+        });
+    });
 
     $('.js-login-popup').on('click', function () {
         manager
