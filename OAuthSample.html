@@ -9,13 +9,11 @@
 
 <body>
     <h1 class="js-user"></h1>
-    Url: <input type="text" id="instance" value="https://iag.uat.serraview.com" /><br/>
-    Client ID: <input type="text" id="client_id" value="KHKxs_APfka-_7zR7_2LJA" /><br />
     <button class="js-login-popup">Login Popup</button>
 
-    <script>       
-    var wayfinderUrl = $('#instance').val();
-    var client_id = $('#client_id').val();
+    <script> 
+    var wayfinderUrl = 'https://iag.uat.serraview.com';
+    var client_id = 'KHKxs_APfka-_7zR7_2LJA';
 
     var settings = {
         authority: wayfinderUrl,
