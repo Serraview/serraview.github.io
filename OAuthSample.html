@@ -1,0 +1,65 @@
+<!-- 
+    This sample demonstrates how to authenticate with Serraview via OAuth2 and make subsequent API calls.
+-->
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/oidc-client/1.2.2/oidc-client.js"></script>
+</head>
+
+<body>
+    <h1 class="js-user"></h1>
+    <button class="js-login-popup">Login Popup</button>
+
+    <script> 
+    var wayfinderUrl = 'https://example.uat.serraview.com';
+    var client_id = '<YOUR_CLIENT_ID';
+
+    var settings = {
+        authority: wayfinderUrl,
+        client_id: client_id,
+        response_type: 'token',
+        // Add any secured actions you need here by prepending the secured action id with 'com.serraview.wf.sa.'
+        scope: 'email com.serraview.wf.sa.2151',
+        popup_redirect_uri: window.location.href
+    };
+
+    var manager = new Oidc.UserManager(settings);
+    var user;
+
+    Oidc.Log.logger = console;
+
+    manager.events.addUserLoaded(function(data){
+        console.log(data);
+        var headers = {};
+
+        if (data && data.access_token) {
+            // Attach the access token to authorize the upcoming API call.
+            headers['Authorization'] = 'Bearer ' + data.access_token;
+        }
+
+        // Now that we're authenticated, call the 'whoami' API.
+        // This could be replaced with calls to other APIs.
+        $.ajax({
+            url: wayfinderUrl + '/api/v2/whoami', 
+            method: 'GET',
+            dataType: 'json',
+            headers: headers
+        }).done(function(response){
+            // Do something with the result of the api call.
+            $('.js-user').text('Hello ' + response.fullName);
+        });
+    });
+
+    $('.js-login-popup').on('click', function () {
+        manager
+            .signinPopup()
+            .catch(function (error) {
+                console.error('error while logging in through the popup', error);
+            });
+    });
+
+    manager.signinPopupCallback();
+    </script>
+</body>
+</html>
